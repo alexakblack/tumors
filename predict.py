@@ -2,8 +2,7 @@ import tensorflow as tf
 import tensorflow.keras.models as models
 
 CLASSES = ["glioma", "meningioma", "notumor", "pituitary"]
-model = models.load_model(args["saved_model_path"])
-print(model.summary())
+model = models.load_model("modeldata")
 
 # ---------------------------------------------------------------------------- #
 
@@ -20,8 +19,8 @@ def prep_image(image):
 	image = np.expand_dims(image, axis=0)
 	return image
 
-def predict(prepped_image):
-	prediction = list(model.predict(prepped_image)[0])
+def predict(predict_image):
+	prediction = list(model.predict(predict_image)[0])
 	predictions_with_labels = list(zip(prediction, CLASSES))
 	predictions_with_labels.sort(reverse=True, key=lambda x: x[0])
 	
@@ -34,13 +33,12 @@ def predict(prepped_image):
 
 
 
-if args["input"] == "image":
-	image = cv2.imread(args["path"])
-	if image is None:
-		ap.error("invalid path to image")
+# cv2.imshow("image", "Testing/glioma_tumor/gg(1).jpg")
+image = cv2.imread("Testing/glioma_tumor/image.jpg")
+cv2.imshow("image", image)
+cv2.waitKey()
 
-	prepped_image = prep_image(image)
-	predict(prepped_image)
+prepped_image = prep_image(image)
+predict(prepped_image)
 
-	cap.release()
-	cv2.destroyAllWindows()
+cv2.destroyAllWindows()
